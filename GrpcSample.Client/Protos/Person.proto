@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+option csharp_namespace = "GrpcSample.Client";
+
+
+message  GetPersonRequest{
+	int64 id = 1;
+}
+
+message PersonResponse{
+	string firstName = 1;
+	string lastName = 2;
+	int32 age = 3;
+
+}
+
+
+service PersonRepository{
+	rpc GetPerson(GetPersonRequest) returns (PersonResponse);
+}
