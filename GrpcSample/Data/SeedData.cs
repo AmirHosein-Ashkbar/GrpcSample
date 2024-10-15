@@ -11,11 +11,10 @@ public static class SeedData
 
         if (!context.People.Any())
         {
-            for (int i = 0; i < 100; i++)
+            for (int i = 1; i <= 100; i++)
             {
                 context.People.Add(new Person
                 {
-                    Id = i,
                     FirstName = $"John{i}",
                     LastName = $"Doe{i}",
                     Age = i,

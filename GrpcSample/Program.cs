@@ -1,11 +1,14 @@
+using GrpcSample.Context;
+using GrpcSample.Data;
 using GrpcSample.Services;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.WebHost.ConfigureKestrel(options =>
 {
     // Setup a HTTP/2 endpoint without TLS.
-    options.ListenLocalhost(7154, o => o.Protocols =
+    options.ListenLocalhost(5070, o => o.Protocols =
         HttpProtocols.Http2);
 });
 // Add services to the container.
@@ -22,7 +25,16 @@ builder.Services.AddGrpc(option =>
 });
 
 
+
+builder.Services.AddDbContext<AppDbContext>(options => options.UseInMemoryDatabase("GrpcDb"));
+
 var app = builder.Build();
+
+using (var scope = app.Services.CreateScope())
+{
+    var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    SeedData.Seed(dbContext);
+}
 
 app.MapGrpcService<GrpcPersonService>();
 
