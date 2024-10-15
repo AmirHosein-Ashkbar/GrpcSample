@@ -11,7 +11,7 @@ public static class SeedData
 
         if (!context.People.Any())
         {
-            for (int i = 1; i <= 100; i++)
+            for (int i = 1; i <= 1000000; i++)
             {
                 context.People.Add(new Person
                 {
@@ -22,6 +22,8 @@ public static class SeedData
             }
 
             context.SaveChanges();
+            Console.WriteLine("Db is Ready");
+
         }
     }
 }

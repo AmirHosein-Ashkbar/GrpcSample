@@ -2,6 +2,7 @@
 using GrpcSample.Context;
 using GrpcSample.Entities;
 using GrpcSample.Protos;
+using Microsoft.EntityFrameworkCore;
 
 namespace GrpcSample.Services;
 
@@ -23,5 +24,22 @@ public class GrpcPersonService : PersonRepository.PersonRepositoryBase
             Age = person.Age,
         };
         return personResponse;
+    }
+
+
+
+
+    public override async Task<PeopleResponse> GetPeople(GetPeopleRequest request, ServerCallContext context)
+    {
+        var people = await _context.People.ToListAsync();
+        var ppl = people.Select(p => new PersonResponse
+        {
+            FirstName = p.FirstName,
+            LastName = p.LastName,
+            Age = p.Age,
+        });
+        var peopleResponse = new PeopleResponse();
+        peopleResponse.People.AddRange(ppl);
+        return peopleResponse;
     }
 }
